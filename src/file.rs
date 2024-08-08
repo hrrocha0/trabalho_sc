@@ -26,27 +26,27 @@ pub fn read_file(filename: &String) -> (Metadata, Vec<u8>) {
 
 #[cfg(test)]
 #[allow(unused)]
-mod tests {
+mod test_files {
     use std::str::from_utf8;
 
     use super::*;
 
     #[test]
     fn test_get_filename() {
-        let args: Vec<String> = vec!["target\\debug\\trabalho_sc.exe", "tests\\hello_world.txt"]
+        let args: Vec<String> = vec!["target/debug/trabalho_sc", "test_files/hello_world.txt"]
             .iter()
             .map(<&str>::to_string)
             .collect();
 
         let filename = get_filename(&args);
 
-        assert_eq!("tests\\hello_world.txt", filename.as_str());
+        assert_eq!("test_files/hello_world.txt", filename.as_str());
     }
 
     #[test]
     #[should_panic]
     fn test_get_filename_for_invalid_input() {
-        let args: Vec<String> = vec!["target\\debug\\trabalho_sc.exe"]
+        let args: Vec<String> = vec!["target/debug/trabalho_sc"]
             .iter()
             .map(<&str>::to_string)
             .collect();
@@ -56,7 +56,7 @@ mod tests {
 
     #[test]
     fn test_read_file() {
-        let filename = String::from("tests\\hello_world.txt");
+        let filename = String::from("test_files/hello_world.txt");
         let (metadata, content) = read_file(&filename);
 
         assert_eq!(12, metadata.len());
@@ -70,7 +70,7 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_read_file_for_invalid_input() {
-        let filename = String::from("tests\\goodbye_world.txt");
+        let filename = String::from("test_files/goodbye_world.txt");
         let (metadata, content) = read_file(&filename);
     }
 }
