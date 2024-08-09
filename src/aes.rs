@@ -16,9 +16,24 @@ pub fn decrypt(block: &[u8; BLOCK_SIZE], key: &[u8; KEY_LENGTH], rounds: usize) 
 }
 
 /// Separa a entrada em blocos de 128 bits.
-#[allow(unused)]
 pub fn separate_blocks(content: &Vec<u8>) -> Vec<[u8; BLOCK_SIZE]> {
-    todo!()
+    let mut blocks: Vec<[u8; BLOCK_SIZE]> = Vec::new();
+    let mut buffer: [u8; BLOCK_SIZE] = [0; BLOCK_SIZE];
+    let mut i: usize = 0;
+
+    for byte in content {
+        buffer[i] = byte.clone();
+        i += 1;
+
+        if i == BLOCK_SIZE {
+            blocks.push(buffer.clone());
+            i = 0;
+        }
+    }
+    if i != 0 {
+        blocks.push(buffer.clone());
+    }
+    blocks
 }
 
 #[cfg(test)]
