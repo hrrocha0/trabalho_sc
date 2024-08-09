@@ -33,11 +33,10 @@ mod test_files {
 
     #[test]
     fn test_get_filename() {
-        let args: Vec<String> = vec!["target/debug/trabalho_sc", "test_files/hello_world.txt"]
-            .iter()
-            .map(<&str>::to_string)
-            .collect();
-
+        let args: Vec<String> = vec![
+            String::from("target/debug/trabalho_sc"),
+            String::from("test_files/hello_world.txt"),
+        ];
         let filename = get_filename(&args);
 
         assert_eq!("test_files/hello_world.txt", filename.as_str());
@@ -46,11 +45,7 @@ mod test_files {
     #[test]
     #[should_panic]
     fn test_get_filename_for_invalid_input() {
-        let args: Vec<String> = vec!["target/debug/trabalho_sc"]
-            .iter()
-            .map(<&str>::to_string)
-            .collect();
-
+        let args: Vec<String> = vec![String::from("target/debug/trabalho_sc")];
         let filename = get_filename(&args);
     }
 
