@@ -3,6 +3,9 @@
 //!
 //! ## Parte 1 - Cifra de bloco e modo de operação CTR
 
+mod aes;
+mod constants;
+
 use common::file;
 use common::file::FileData;
 use std::env;
