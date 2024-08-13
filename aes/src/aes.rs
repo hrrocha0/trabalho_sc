@@ -29,24 +29,37 @@ pub fn decrypt(block: &Block, round_keys: &Vec<Key>, rounds: usize) -> Block {
     todo!()
 }
 
-#[allow(unused)]
 fn sub_bytes(state: &mut Block) {
-    todo!()
+    for i in 0..BLOCK_SIZE {
+        state[i] = S_BOX[state[i] as usize];
+    }
 }
 
-#[allow(unused)]
 fn shift_rows(state: &mut Block) {
-    todo!()
+    let mut temp = state.clone();
+
+    for i in 0..BLOCK_SIZE {
+        temp[i] = state[(5 * i) % BLOCK_SIZE];
+    }
+    *state = temp;
 }
 
-#[allow(unused)]
 fn mix_columns(state: &mut Block) {
-    todo!()
+    let mut temp = state.clone();
+
+    for i in 0..(BLOCK_SIZE / 4) {
+        temp[4 * i] = MUL_2[state[4 * i] as usize] ^ MUL_3[state[4 * i + 1] as usize] ^ state[4 * i + 2] ^ state[4 * i + 3];
+        temp[4 * i + 1] = state[4 * i] ^ MUL_2[state[4 * i + 1] as usize] ^ MUL_3[state[4 * i + 2] as usize] ^ state[4 * i + 3];
+        temp[4 * i + 2] = state[4 * i] ^ state[4 * i + 1] ^ MUL_2[state[4 * i + 2] as usize] ^ MUL_3[state[4 * i + 3] as usize];
+        temp[4 * i + 3] = MUL_3[state[4 * i] as usize] ^ state[4 * i + 1] ^ state[4 * i + 2] ^ MUL_2[state[4 * i + 3] as usize];
+    }
+    *state = temp;
 }
 
-#[allow(unused)]
 fn add_round_key(state: &mut Block, round_key: &Key) {
-    todo!()
+    for i in 0..BLOCK_SIZE {
+        state[i] ^= round_key[i];
+    }
 }
 
 #[allow(unused)]
