@@ -3,8 +3,6 @@
 //!
 //! ## Parte 1 - Cifra de bloco e modo de operação CTR
 
-mod aes;
-
 fn main() {
-    todo!()
+    println!("Hello, world!");
 }
