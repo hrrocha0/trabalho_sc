@@ -4,17 +4,7 @@
 //! ## Parte 1 - Cifra de bloco e modo de operação CTR
 
 mod aes;
-mod constants;
-
-use common::file;
-use common::file::FileData;
-use std::env;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    let filename = file::get_filename(&args);
-    let FileData { metadata, content } = file::read_file(&filename);
-
-    println!("File size: {}", metadata.len());
-    println!("File content: {:?}", content.clone());
+    todo!()
 }

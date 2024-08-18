@@ -9,13 +9,6 @@ pub struct FileData {
     pub content: Vec<u8>,
 }
 
-pub fn get_filename(args: &Vec<String>) -> String {
-    if args.len() <= 1 {
-        panic!("O nome do arquivo deve ser especificado.");
-    }
-    args[1].clone()
-}
-
 pub fn read_file(filename: &String) -> FileData {
     let path = Path::new(&filename);
     let mut file = File::open(&path).expect("Não foi possível abrir o arquivo.");

@@ -1,12 +1,15 @@
 //! Módulo responsável pela implementação do algoritmo [AES](https://pt.wikipedia.org/wiki/Advanced_Encryption_Standard).
 
-use crate::constants::*;
+mod ctr;
+mod constants;
+
+use constants::*;
 
 type Block = [u8; 16];
 type Key = [u8; 16];
 type RoundKey = [u32; 4];
 
-pub fn cipher(block: &Block, round_keys: &Vec<RoundKey>, rounds: usize) -> Block {
+fn cipher(block: &Block, round_keys: &Vec<RoundKey>, rounds: usize) -> Block {
     let mut state = block.clone();
 
     add_round_key(&mut state, &round_keys[0]);
@@ -24,7 +27,7 @@ pub fn cipher(block: &Block, round_keys: &Vec<RoundKey>, rounds: usize) -> Block
     state
 }
 
-pub fn decipher(block: &Block, round_keys: &Vec<RoundKey>, rounds: usize) -> Block {
+fn decipher(block: &Block, round_keys: &Vec<RoundKey>, rounds: usize) -> Block {
     let mut state = block.clone();
 
     add_round_key(&mut state, &round_keys[rounds]);
@@ -35,6 +38,10 @@ pub fn decipher(block: &Block, round_keys: &Vec<RoundKey>, rounds: usize) -> Blo
         add_round_key(&mut state, &round_keys[round]);
         inv_mix_columns(&mut state);
     }
+    inv_shift_rows(&mut state);
+    inv_sub_bytes(&mut state);
+    add_round_key(&mut state, &round_keys[0]);
+
     state
 }
 
@@ -129,7 +136,7 @@ fn inv_shift_rows(state: &mut Block) {
     let mut temp = state.clone();
 
     for i in 0..16 {
-        temp[i] = state[(i - 4 * (i % 4)) % 16];
+        temp[i] = state[(i + 16 - 4 * (i % 4)) % 16];
     }
     *state = temp;
 }
