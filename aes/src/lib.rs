@@ -1,4 +1,5 @@
-//! Módulo responsável pela implementação do algoritmo [AES](https://pt.wikipedia.org/wiki/Advanced_Encryption_Standard).
+//! Módulo responsável pela implementação do
+//! [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard).
 #![allow(dead_code)]
 
 pub mod ctr;
@@ -7,11 +8,8 @@ mod key_scheduling;
 
 use constants::*;
 
-pub type Block = [u8; 16];
-pub type Key = [u8; 16];
-pub type RoundKey = [u32; 4];
-
-fn cipher(block: &Block, round_keys: &Vec<RoundKey>, rounds: usize) -> Block {
+/// Cifra um bloco de 128 bits com o algoritmo AES-128.
+pub fn cipher(block: &[u8; 16], round_keys: &Vec<[u32; 4]>, rounds: usize) -> [u8; 16] {
     let mut state = block.clone();
 
     add_round_key(&mut state, &round_keys[0]);
@@ -29,7 +27,8 @@ fn cipher(block: &Block, round_keys: &Vec<RoundKey>, rounds: usize) -> Block {
     state
 }
 
-fn decipher(block: &Block, round_keys: &Vec<RoundKey>, rounds: usize) -> Block {
+/// Decifra um bloco de 128 bits com o algoritmo AES-128.
+pub fn decipher(block: &[u8; 16], round_keys: &Vec<[u32; 4]>, rounds: usize) -> [u8; 16] {
     let mut state = block.clone();
 
     add_round_key(&mut state, &round_keys[rounds]);
@@ -47,7 +46,7 @@ fn decipher(block: &Block, round_keys: &Vec<RoundKey>, rounds: usize) -> Block {
     state
 }
 
-fn add_round_key(state: &mut Block, round_key: &RoundKey) {
+fn add_round_key(state: &mut [u8; 16], round_key: &[u32; 4]) {
     let key_bytes: Vec<u8> = round_key.iter().flat_map(|w| { w.to_le_bytes() }).collect();
 
     for i in 0..16 {
@@ -55,13 +54,13 @@ fn add_round_key(state: &mut Block, round_key: &RoundKey) {
     }
 }
 
-fn sub_bytes(state: &mut Block) {
+fn sub_bytes(state: &mut [u8; 16]) {
     for i in 0..16 {
         state[i] = S_BOX[state[i] as usize];
     }
 }
 
-fn shift_rows(state: &mut Block) {
+fn shift_rows(state: &mut [u8; 16]) {
     let mut temp = state.clone();
 
     for i in 0..16 {
@@ -70,7 +69,7 @@ fn shift_rows(state: &mut Block) {
     *state = temp;
 }
 
-fn mix_columns(state: &mut Block) {
+fn mix_columns(state: &mut [u8; 16]) {
     let mut temp = state.clone();
 
     for i in 0..4 {
@@ -97,13 +96,13 @@ fn mix_columns(state: &mut Block) {
     *state = temp;
 }
 
-fn inv_sub_bytes(state: &mut Block) {
+fn inv_sub_bytes(state: &mut [u8; 16]) {
     for i in 0..16 {
         state[i] = INV_S_BOX[state[i] as usize];
     }
 }
 
-fn inv_shift_rows(state: &mut Block) {
+fn inv_shift_rows(state: &mut [u8; 16]) {
     let mut temp = state.clone();
 
     for i in 0..16 {
@@ -112,7 +111,7 @@ fn inv_shift_rows(state: &mut Block) {
     *state = temp;
 }
 
-fn inv_mix_columns(state: &mut Block) {
+fn inv_mix_columns(state: &mut [u8; 16]) {
     let mut temp = state.clone();
 
     for i in 0..4 {

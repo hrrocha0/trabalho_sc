@@ -1,12 +1,22 @@
-use crate::{Key, RoundKey};
+//! Módulo responsável por implementar a etapa de
+//! [Key Schedule](https://en.wikipedia.org/wiki/AES_key_schedule) do AES.
+
 use crate::constants::{R_CON, S_BOX};
 
-pub(crate) fn key_expansion(key: &Key, rounds: usize) -> Vec<RoundKey> {
+/// Expande a chave de 128 bits para a quantidade de rounds especificada.
+pub(crate) fn key_expansion(key: u128, rounds: usize) -> Vec<[u32; 4]> {
     let mut expanded_key: Vec<u32> = vec![0; 4 * (rounds + 1)];
     let mut temp;
 
+    let key_bytes = key.to_le_bytes();
+
     for i in 0..4 {
-        expanded_key[i] = u32::from_le_bytes([key[4 * i], key[4 * i + 1], key[4 * i + 2], key[4 * i + 3]]);
+        expanded_key[i] = u32::from_le_bytes([
+            key_bytes[4 * i],
+            key_bytes[4 * i + 1],
+            key_bytes[4 * i + 2],
+            key_bytes[4 * i + 3],
+        ]);
     }
     for i in 4..(4 * (rounds + 1)) {
         temp = expanded_key[i - 1];
