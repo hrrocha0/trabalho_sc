@@ -6,7 +6,7 @@ pub(crate) fn key_expansion(key: &Key, rounds: usize) -> Vec<RoundKey> {
     let mut temp;
 
     for i in 0..4 {
-        expanded_key[i] = u32::from_ne_bytes([key[4 * i], key[4 * i + 1], key[4 * i + 2], key[4 * i + 3]]);
+        expanded_key[i] = u32::from_le_bytes([key[4 * i], key[4 * i + 1], key[4 * i + 2], key[4 * i + 3]]);
     }
     for i in 4..(4 * (rounds + 1)) {
         temp = expanded_key[i - 1];
@@ -20,7 +20,7 @@ pub(crate) fn key_expansion(key: &Key, rounds: usize) -> Vec<RoundKey> {
 }
 
 fn rot_word(word: u32) -> u32 {
-    let mut bytes: [u8; 4] = word.to_ne_bytes();
+    let mut bytes: [u8; 4] = word.to_le_bytes();
     let temp = bytes[0];
 
     for i in 0..3 {
@@ -32,7 +32,7 @@ fn rot_word(word: u32) -> u32 {
 }
 
 fn sub_word(word: u32) -> u32 {
-    let mut bytes: [u8; 4] = word.to_ne_bytes();
+    let mut bytes: [u8; 4] = word.to_le_bytes();
 
     for i in 0..4 {
         bytes[i] = S_BOX[bytes[i] as usize];

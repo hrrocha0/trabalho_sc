@@ -1,4 +1,5 @@
 //! Módulo responsável pela implementação do algoritmo [AES](https://pt.wikipedia.org/wiki/Advanced_Encryption_Standard).
+#![allow(dead_code)]
 
 pub mod ctr;
 mod constants;
@@ -28,7 +29,6 @@ fn cipher(block: &Block, round_keys: &Vec<RoundKey>, rounds: usize) -> Block {
     state
 }
 
-#[allow(unused)]
 fn decipher(block: &Block, round_keys: &Vec<RoundKey>, rounds: usize) -> Block {
     let mut state = block.clone();
 
@@ -48,7 +48,7 @@ fn decipher(block: &Block, round_keys: &Vec<RoundKey>, rounds: usize) -> Block {
 }
 
 fn add_round_key(state: &mut Block, round_key: &RoundKey) {
-    let key_bytes: Vec<u8> = round_key.iter().flat_map(|w| { w.to_ne_bytes() }).collect();
+    let key_bytes: Vec<u8> = round_key.iter().flat_map(|w| { w.to_le_bytes() }).collect();
 
     for i in 0..16 {
         state[i] ^= key_bytes[i];
