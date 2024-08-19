@@ -2,8 +2,8 @@ use common::file;
 
 #[test]
 fn test_cipher() {
-    let plaintext = file::read_file("tests/files/plaintext.txt").content;
-    let expected = file::read_file("tests/files/ciphertext.txt").content;
+    let plaintext = file::read_file("tests/files/plaintext.txt").unwrap();
+    let expected = file::read_file("tests/files/ciphertext.txt").unwrap();
     let key = 0x0f0e0d0c0b0a09080706050403020100;
     let offset = 0x00000000000000000000000000000000;
 
@@ -14,8 +14,8 @@ fn test_cipher() {
 
 #[test]
 fn test_decipher() {
-    let ciphertext = file::read_file("tests/files/ciphertext.txt").content;
-    let expected = file::read_file("tests/files/plaintext.txt").content;
+    let ciphertext = file::read_file("tests/files/ciphertext.txt").unwrap();
+    let expected = file::read_file("tests/files/plaintext.txt").unwrap();
     let key = 0x0f0e0d0c0b0a09080706050403020100;
     let offset = 0x00000000000000000000000000000000;
 

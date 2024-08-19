@@ -1,29 +1,26 @@
 //! Módulo responsável por gerenciar a leitura e a escrita em arquivos.
 
-use std::fs::{File, Metadata};
-use std::io::{Read, Write};
+use std::fs::File;
+use std::io::{Error, Read, Write};
 use std::path::Path;
 
-pub struct FileData {
-    pub metadata: Metadata,
-    pub content: Vec<u8>,
-}
+pub fn read_file(path: &str) -> Result<Vec<u8>, Error> {
+    let path = Path::new(path);
+    let mut file = File::open(&path)?;
 
-pub fn read_file(filename: &str) -> FileData {
-    let path = Path::new(filename);
-    let mut file = File::open(&path).expect("Não foi possível abrir o arquivo.");
-
-    let metadata = file.metadata().expect("Não foi possível ler os metatados do arquivo.");
+    let metadata = file.metadata()?;
     let mut content = vec![0; metadata.len() as usize];
 
-    file.read(&mut content).expect("Não foi possível ler o arquivo.");
+    file.read(&mut content)?;
 
-    FileData { metadata, content }
+    Ok(content)
 }
 
-pub fn write_file(filename: &str, content: &Vec<u8>) {
-    let path = Path::new(filename);
-    let mut file = File::create(&path).expect("Não foi possível criar ou abrir o arquivo.");
+pub fn write_file(path: &str, content: &Vec<u8>) -> Result<(), Error> {
+    let path = Path::new(path);
+    let mut file = File::create(&path)?;
 
-    file.write(&content).expect("Não foi possível escrever no arquivo.");
+    file.write(&content)?;
+
+    Ok(())
 }

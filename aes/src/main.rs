@@ -9,43 +9,58 @@
 //!
 //! ### Uso
 //!
-//! Devem ser fornecidos os seguintes argumentos:
-//! * \<input\> - o caminho do arquivo de entrada
-//! * \<output\> - o caminho do arquivo de saída
-//! * \<key\> - a chave de 128 bits codificada como um inteiro sem sinal
-//! * \<iv\> - o vetor inicial (offset) codificado como um inteiro sem sinal
-//! * \<rounds\> - a quantidade de rounds, opcional, 10 por padrão
-//!
-//! Por exemplo:
+//! Utilize o seguinte comando para mais informações:
 //!
 //! ```shell
-//! aes plaintext.txt ciphertext.txt 0123456789abcdef 0000000000000000 12
+//! ./aes <ENTRADA> <SAIDA> <CHAVE> <OFFSET> [ROUNDS]
 //! ```
 
+use clap::Parser;
 use common::file;
-use std::env;
+
+/// Define os argumentos da linha de comando.
+#[derive(Parser)]
+struct Cli {
+    /// Caminho do arquivo de entrada
+    #[arg(value_name = "ENTRADA")]
+    input: String,
+
+    /// Caminho do arquivo de saída
+    #[arg(value_name = "SAIDA")]
+    output: String,
+
+    /// Chave codificada como um inteiro sem sinal de 128 bits
+    #[arg(value_name = "CHAVE")]
+    key: u128,
+
+    /// Vetor Inicial (offset) codificado como um inteiro sem sinal de 128 bits
+    #[arg()]
+    offset: u128,
+
+    /// Número de rounds, 10 por padrão
+    #[arg()]
+    rounds: Option<usize>,
+}
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
+    let args = Cli::parse();
 
-    let input = file::read_file(args.get(1).expect("O arquivo de entrada deve ser especificado.")).content;
+    let input = args.input;
+    let output = args.output;
+    let key = args.key;
+    let offset = args.offset;
+    let rounds = args.rounds.unwrap_or(10);
 
-    let key: u128 = args.get(3)
-        .expect("A chave deve ser especificada.")
-        .parse::<u128>()
-        .expect("A chave deve ser um inteiro sem sinal de 128 bits.");
+    let input_data = file::read_file(&input).expect("Não foi possível ler o arquivo de entrada");
+    let output_data = aes::ctr::cipher(&input_data, key, offset, rounds);
 
-    let offset: u128 = args.get(4)
-        .expect("O vetor inicial deve ser especificado.")
-        .parse()
-        .expect("O bloco deve ser um inteiro sem sinal de 128 bits");
+    file::write_file(&output, &output_data).expect("Não foi possível escrever no arquivo de saída");
 
-    let rounds: usize = args.get(5)
-        .unwrap_or(&String::new())
-        .parse()
-        .unwrap_or(10);
-
-    let output = aes::ctr::cipher(&input, key, offset, rounds);
-
-    file::write_file(args.get(2).expect("O arquivo de saída deve ser especificado."), &output);
+    println!("{} bytes cifrados/decifrados com sucesso!", input_data.len());
+    println!();
+    println!("Entrada: {}", &input);
+    println!("Saída: {}", &output);
+    println!("Chave: {:#032x}", key);
+    println!("Offset: {:#032x}", offset);
+    println!("Rounds: {}", rounds);
 }

@@ -12,18 +12,13 @@ Implementação do algoritmo de criptografia simétrica
 
 ### Uso
 
-Devem ser fornecidos os seguintes argumentos:
-
-* \<input\> - o caminho do arquivo de entrada
-* \<output\> - o caminho do arquivo de saída
-* \<key\> - a chave de 128 bits codificada como um inteiro sem sinal
-* \<iv\> - o vetor inicial (offset) codificado como um inteiro sem sinal
-* \<rounds\> - a quantidade de rounds, opcional, 10 por padrão
-
-Por exemplo:
+Utilize o seguinte comando para mais informações:
 
 ```shell
-aes plaintext.txt ciphertext.txt 20011376718272490338853433276725592320 0 10
+./aes --help
 ```
 
 ## Parte 2 - Gerador/Verificador de Assinaturas
+
+Implementação de um gerador e verificador de assinaturas [RSA](https://en.wikipedia.org/wiki/RSA_(cryptosystem)) em
+arquivos.
