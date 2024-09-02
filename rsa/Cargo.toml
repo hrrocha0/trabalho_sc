@@ -8,3 +8,5 @@ common = { path = "../common" }
 clap = { version = "4.5.16", features = ["derive"] }
 num-bigint = { version = "0.4.6", features = ["rand"] }
 rand = "0.8.5"
+sha3 = "0.11.0-pre.4"
+base64 = "0.22.1"

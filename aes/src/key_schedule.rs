@@ -1,9 +1,8 @@
-//! Módulo responsável por implementar a etapa de
-//! [Key Schedule](https://en.wikipedia.org/wiki/AES_key_schedule) do AES.
+//! Implementação do key schedule do AES.
 
 use crate::constants::{R_CON, S_BOX};
 
-/// Expande a chave de 128 bits para a quantidade de rounds especificada.
+/// Expande a chave para a quantidade de rounds estabelecida.
 pub(crate) fn key_expansion(key: u128, rounds: usize) -> Vec<[u32; 4]> {
     let mut expanded_key: Vec<u32> = vec![0; 4 * (rounds + 1)];
     let mut temp;

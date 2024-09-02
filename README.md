@@ -15,10 +15,18 @@ Implementação do algoritmo de criptografia simétrica
 Utilize o seguinte comando para mais informações:
 
 ```shell
-./aes --help
+aes.exe --help
 ```
 
 ## Parte 2 - Gerador/Verificador de Assinaturas
 
 Implementação de um gerador e verificador de assinaturas [RSA](https://en.wikipedia.org/wiki/RSA_(cryptosystem)) em
 arquivos.
+
+### Uso
+
+Utilize o seguinte comando para mais informações:
+
+```shell
+rsa.exe --help
+```

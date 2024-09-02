@@ -1,15 +1,14 @@
-//! Módulo responsável pela implementação do
-//! [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard).
+//! Implementação do algoritmo AES-128.
 #![allow(dead_code)]
 
 pub mod ctr;
 mod constants;
-mod key_scheduling;
+mod key_schedule;
 
 use constants::*;
 
-/// Cifra um bloco de 128 bits com o algoritmo AES-128.
-pub fn cipher(block: &[u8; 16], round_keys: &Vec<[u32; 4]>, rounds: usize) -> [u8; 16] {
+/// Cifra um bloco de 128 bits.
+pub(crate) fn encrypt(block: &[u8; 16], round_keys: &Vec<[u32; 4]>, rounds: usize) -> [u8; 16] {
     let mut state = block.clone();
 
     add_round_key(&mut state, &round_keys[0]);
@@ -27,8 +26,8 @@ pub fn cipher(block: &[u8; 16], round_keys: &Vec<[u32; 4]>, rounds: usize) -> [u
     state
 }
 
-/// Decifra um bloco de 128 bits com o algoritmo AES-128.
-pub fn decipher(block: &[u8; 16], round_keys: &Vec<[u32; 4]>, rounds: usize) -> [u8; 16] {
+/// Decifra um bloco de 128 bits.
+pub(crate) fn decrypt(block: &[u8; 16], round_keys: &Vec<[u32; 4]>, rounds: usize) -> [u8; 16] {
     let mut state = block.clone();
 
     add_round_key(&mut state, &round_keys[rounds]);

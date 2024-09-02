@@ -1,3 +1,3 @@
-//! Biblioteca com funções comuns a todas as partes do trabalho.
+//! Biblioteca com funções de utilidade geral.
 
 pub mod file;
